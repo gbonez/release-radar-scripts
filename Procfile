@@ -1,1 +1,1 @@
-web: python callback.py
+web: python script.py
