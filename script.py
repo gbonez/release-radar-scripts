@@ -15,6 +15,11 @@ DRY_RUN = os.environ.get("DRY_RUN") or 0
 SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
 SPOTIFY_REDIRECT_URI = (os.environ.get("BASE_URL") or "http://localhost:5000") + "/callback"
+SPOTIFY_REFRESH_TOKEN = os.environ.get("SPOTIFY_REFRESH_TOKEN")
+
+if not SPOTIFY_REFRESH_TOKEN:
+    raise ValueError("❌ Missing SPOTIFY_REFRESH_TOKEN in environment variables.")
+
 
 TWILIO_SID = os.environ.get("TWILIO_SID")
 TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
@@ -28,12 +33,16 @@ ARTISTS_FILE = "artists.json"
 RELEASES_FILE = "releases.json"
 
 scope = "user-library-read playlist-modify-private playlist-modify-public user-top-read"
-sp = Spotify(auth_manager=SpotifyOAuth(
+
+auth_manager = SpotifyOAuth(
     client_id=SPOTIFY_CLIENT_ID,
     client_secret=SPOTIFY_CLIENT_SECRET,
     redirect_uri=SPOTIFY_REDIRECT_URI,
-    scope=scope
-))
+    scope=scope,
+    cache_path=None
+)
+auth_manager.refresh_access_token(SPOTIFY_REFRESH_TOKEN)
+sp = Spotify(auth_manager=auth_manager)
 
 # ==== HELPERS ====
 def parse_release_date(date_str):
