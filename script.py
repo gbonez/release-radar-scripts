@@ -20,7 +20,6 @@ SPOTIFY_REFRESH_TOKEN = os.environ.get("SPOTIFY_REFRESH_TOKEN")
 if not SPOTIFY_REFRESH_TOKEN:
     raise ValueError("❌ Missing SPOTIFY_REFRESH_TOKEN in environment variables.")
 
-
 TWILIO_SID = os.environ.get("TWILIO_SID")
 TWILIO_AUTH_TOKEN = os.environ.get("TWILIO_AUTH_TOKEN")
 TWILIO_PHONE = os.environ.get("TWILIO_PHONE")
@@ -32,8 +31,12 @@ LASTFM_USERNAME = os.environ.get("LASTFM_USERNAME")
 ARTISTS_FILE = "artists.json"
 RELEASES_FILE = "releases.json"
 
+PLAYLIST_NAME = "Enhanced Releases"
+PLAYLIST_ID = os.environ.get("PLAYLIST_ID")  # optional hardcoded playlist ID
+
 scope = "user-library-read playlist-modify-private playlist-modify-public user-top-read"
 
+# ==== SPOTIFY AUTH ====
 auth_manager = SpotifyOAuth(
     client_id=SPOTIFY_CLIENT_ID,
     client_secret=SPOTIFY_CLIENT_SECRET,
@@ -68,7 +71,7 @@ def safe_spotify_call(func, *args, **kwargs):
             else:
                 raise
 
-# ==== STEP 1: Load liked songs & track artists ====
+# ==== LAST.FM PLAY COUNTS ====
 def fetch_lastfm_play_counts(artist_name):
     url = "http://ws.audioscrobbler.com/2.0/"
     params = {
@@ -87,6 +90,7 @@ def fetch_lastfm_play_counts(artist_name):
         print(f"Failed to fetch Last.fm data for {artist_name}: {e}")
         return 0
 
+# ==== ARTISTS ====
 def update_artists_file():
     if os.path.exists(ARTISTS_FILE):
         with open(ARTISTS_FILE, "r") as f:
@@ -145,7 +149,7 @@ def update_artists_file():
         json.dump(data, f, indent=2)
     return data
 
-# ==== STEP 1b: Fetch recent Spotify listening activity ====
+# ==== RECENT LISTENING SCORES ====
 def fetch_recent_listening_scores(time_range='medium_term', top_limit=50):
     recent_scores = {}
     results = safe_spotify_call(sp.current_user_top_artists, limit=top_limit, time_range=time_range)
@@ -154,7 +158,7 @@ def fetch_recent_listening_scores(time_range='medium_term', top_limit=50):
         recent_scores[artist['id']] = max_rank - rank
     return recent_scores
 
-# ==== STEP 2: Check new releases per artist ====
+# ==== CHECK NEW RELEASES ====
 def check_new_releases(artists_data, recent_scores):
     releases = []
     seven_days_ago = datetime.datetime.now() - datetime.timedelta(days=1)
@@ -207,52 +211,110 @@ def check_new_releases(artists_data, recent_scores):
         reverse=True
     )
 
-    print(f"Total new releases found (sorted by combined score): {len(releases_sorted)}")
     with open(RELEASES_FILE, "w") as f:
         json.dump(releases_sorted, f, indent=2)
 
+    print(f"Total new releases found: {len(releases_sorted)}")
     return releases_sorted
 
-# ==== STEP 3: Create playlist & add songs ====
-def create_playlist_with_releases(releases):
-    if not releases:
-        print("No new releases found.")
-        return None
-
-    if DRY_RUN:
-        print("DRY RUN: Would create playlist with releases:")
-        for r in releases:
-            print(f" - {r['name']} by {r['artist']} (liked_count={r['liked_count']}, recent_score={r['recent_score']}, recent_artist_plays={r['recent_artist_plays']})")
-        return "dry-run-playlist-url"
-
-    today = datetime.datetime.now().strftime("%m/%d/%y")
+# ==== PLAYLIST MANAGEMENT ====
+def get_or_create_playlist():
+    """Return playlist object for 'Enhanced Releases'."""
     user_id = safe_spotify_call(sp.current_user)["id"]
-    playlist = safe_spotify_call(sp.user_playlist_create, user_id, name=f"new releases - {today}", public=False)
 
-    track_ids = []
+    # Try hardcoded ID first
+    if PLAYLIST_ID:
+        try:
+            playlist = safe_spotify_call(sp.playlist, PLAYLIST_ID)
+            return playlist
+        except SpotifyException:
+            print("Hardcoded playlist ID not found, creating a new playlist...")
+
+    # Search by name
+    playlists = safe_spotify_call(sp.current_user_playlists, limit=50)
+    for pl in playlists["items"]:
+        if pl["name"] == PLAYLIST_NAME:
+            return pl
+
+    # Not found? Create new playlist
+    playlist = safe_spotify_call(sp.user_playlist_create, user_id, name=PLAYLIST_NAME, public=False)
+    print(f"Created playlist '{PLAYLIST_NAME}'")
+    return playlist
+
+def add_new_releases_to_playlist(releases, playlist):
+    """Add only new releases to playlist. Returns added tracks info for SMS."""
+    track_ids_in_playlist = []
+    offset = 0
+    while True:
+        result = safe_spotify_call(sp.playlist_tracks, playlist["id"], limit=100, offset=offset)
+        track_ids_in_playlist.extend([item["track"]["id"] for item in result["items"]])
+        if len(result["items"]) < 100:
+            break
+        offset += 100
+
+    added_releases = []
+    track_ids_to_add = []
     for r in releases:
         album_tracks = safe_spotify_call(sp.album_tracks, r["track_id"])
         if not album_tracks["items"]:
             continue
         first_track_id = album_tracks["items"][0]["id"]
-        track_ids.append(first_track_id)
+        if first_track_id not in track_ids_in_playlist:
+            track_ids_to_add.append(first_track_id)
+            added_releases.append(r)
 
-    safe_spotify_call(sp.playlist_add_items, playlist["id"], track_ids)
-    return playlist["external_urls"]["spotify"]
+    if track_ids_to_add:
+        safe_spotify_call(sp.playlist_add_items, playlist["id"], track_ids_to_add)
+        print(f"Added {len(track_ids_to_add)} new releases to '{playlist['name']}'")
+    else:
+        print("No new releases to add.")
 
-# ==== STEP 4: Send SMS ====
-def send_sms(releases, playlist_url):
-    if not releases:
+    return added_releases
+
+def remove_old_tracks_from_playlist(playlist, days=10):
+    """Remove tracks older than `days` from playlist."""
+    now = datetime.datetime.utcnow()
+    offset = 0
+    removed_count = 0
+
+    while True:
+        result = safe_spotify_call(sp.playlist_tracks, playlist["id"], limit=100, offset=offset)
+        if not result["items"]:
+            break
+
+        tracks_to_remove = []
+        for item in result["items"]:
+            added_at = datetime.datetime.strptime(item["added_at"], "%Y-%m-%dT%H:%M:%SZ")
+            if (now - added_at).days > days:
+                tracks_to_remove.append(item["track"]["uri"])
+
+        if tracks_to_remove:
+            safe_spotify_call(sp.playlist_remove_all_occurrences_of_items, playlist["id"], tracks_to_remove)
+            removed_count += len(tracks_to_remove)
+
+        if len(result["items"]) < 100:
+            break
+        offset += 100
+
+    if removed_count:
+        print(f"Removed {removed_count} old tracks from '{playlist['name']}'")
+    else:
+        print("No old tracks to remove.")
+
+# ==== SEND SMS ====
+def send_sms(new_releases, playlist_url):
+    if not new_releases:
+        print("No new releases to notify via SMS.")
         return
 
     today = datetime.datetime.now().strftime("%m/%d/%y")
-    message_body = f"Your new release list for {today} has been generated!\n\n"
-    for i, r in enumerate(releases[:5], start=1):
+    message_body = f"Your new release list for {today} has been updated!\n\n"
+    for i, r in enumerate(new_releases[:5], start=1):
         message_body += f"{i}. '{r['name']}' by {r['artist']} ({r['type']})\n"
-    message_body += f"\nAnd more! Check out the full playlist here: {playlist_url}"
+    message_body += f"\nCheck all releases here: {playlist_url}"
 
     if DRY_RUN:
-        print("DRY RUN: Would send SMS:")
+        print("DRY RUN: SMS content:")
         print(message_body)
         return
 
@@ -265,6 +327,9 @@ if __name__ == "__main__":
     artists_data = update_artists_file()
     recent_scores = fetch_recent_listening_scores(time_range='medium_term', top_limit=50)
     releases = check_new_releases(artists_data, recent_scores)
-    playlist_url = create_playlist_with_releases(releases)
-    if playlist_url:
-        send_sms(releases, playlist_url)
+
+    playlist = get_or_create_playlist()
+    new_releases_added = add_new_releases_to_playlist(releases, playlist)
+    remove_old_tracks_from_playlist(playlist, days=10)
+
+    send_sms(new_releases_added, playlist["external_urls"]["spotify"])
