@@ -210,29 +210,48 @@ def get_or_create_playlist():
     return playlist
 
 def add_new_releases_to_playlist(releases, playlist):
-    existing_track_ids = []
+    # Map of artist_id -> track_id currently in playlist
+    artist_existing_track = {}
     offset = 0
     while True:
         result = safe_spotify_call(sp.playlist_tracks, playlist["id"], limit=100, offset=offset)
-        existing_track_ids.extend([item["track"]["id"] for item in result["items"]])
+        for item in result["items"]:
+            track = item["track"]
+            if not track:
+                continue
+            artist_ids = [a["id"] for a in track["artists"]]
+            for aid in artist_ids:
+                # Keep the first track id of the release for comparison
+                if aid not in artist_existing_track:
+                    artist_existing_track[aid] = track["id"]
         if len(result["items"]) < 100:
             break
         offset += 100
+
     added_releases = []
-    new_track_ids = []
+
     for r in releases:
         album_tracks = safe_spotify_call(sp.album_tracks, r["track_id"])
         if not album_tracks["items"]:
             continue
         first_track_id = album_tracks["items"][0]["id"]
-        if first_track_id not in existing_track_ids:
-            new_track_ids.append(first_track_id)
-            added_releases.append(r)
-    if new_track_ids:
-        safe_spotify_call(sp.playlist_add_items, playlist["id"], new_track_ids)
-        print(f"🎧 Added {len(new_track_ids)} new releases to '{playlist['name']}'")
-    else:
-        print("No new releases to add.")
+
+        existing_track_id = artist_existing_track.get(r["artist_id"])
+
+        if existing_track_id == first_track_id:
+            continue
+        elif existing_track_id:
+            safe_spotify_call(sp.playlist_remove_all_occurrences_of_items, playlist["id"], [existing_track_id])
+            print(f"🧹 Removed old release by {r['artist']}")
+
+        # Add new release
+        safe_spotify_call(sp.playlist_add_items, playlist["id"], [first_track_id])
+        added_releases.append(r)
+        print(f"🎧 Added new release '{r['name']}' by {r['artist']}")
+
+        # Update map so future releases of same artist don't conflict
+        artist_existing_track[r["artist_id"]] = first_track_id
+
     return added_releases
 
 def remove_old_tracks_from_playlist(playlist, days=10):
