@@ -1,1 +1,5 @@
 secrets.json
+.DS_Store
+load_env.sh
+refresh.py
+test.py
