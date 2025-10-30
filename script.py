@@ -9,7 +9,7 @@ from spotipy.exceptions import SpotifyException
 
 # ==== CONFIGURATION ====
 print(f"Starting Release Radar Script..")
-time.sleep(10)
+time.sleep(60)
 
 SPOTIFY_CLIENT_ID = os.environ.get("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = os.environ.get("SPOTIFY_CLIENT_SECRET")
