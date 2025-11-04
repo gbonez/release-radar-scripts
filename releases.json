@@ -1,242 +1,288 @@
 [
   {
+    "name": "ep 1",
+    "artist": "strongboi",
+    "artist_id": "2ygluM9w0lmulZrMJ1pI0i",
+    "type": "ep",
+    "album_id": "3LnhpCfWzvyUy3WTE6AwDr",
+    "liked_count": 16,
+    "recent_score": 47,
+    "recent_artist_plays": 39,
+    "release_date": "2025-10-31"
+  },
+  {
     "name": "Eyes Closed",
     "artist": "Melody's Echo Chamber",
     "artist_id": "1S0vL284jxZYKtZQ2jsQ2X",
     "type": "single",
-    "track_id": "6GTw2AKd5RhtzkMQ9utnGJ",
+    "album_id": "6GTw2AKd5RhtzkMQ9utnGJ",
     "liked_count": 15,
-    "recent_score": 23,
-    "recent_artist_plays": 14
+    "recent_score": 26,
+    "recent_artist_plays": 14,
+    "release_date": "2025-10-29"
   },
   {
-    "name": "Oblivion",
-    "artist": "Alice Phoebe Lou",
-    "artist_id": "03uMw43UVu9MsQCcHVSGjX",
-    "type": "album",
-    "track_id": "3QCJELG1LLOrUDzGnskiIa",
-    "liked_count": 24,
-    "recent_score": 15,
-    "recent_artist_plays": 1
-  },
-  {
-    "name": "StarX Lover: Supernova",
-    "artist": "Dreamer Isioma",
-    "artist_id": "6u6AbTVrbabv27DLcSrF8i",
-    "type": "album",
-    "track_id": "14do4LBBUdv9InIh1kLkOA",
-    "liked_count": 13,
-    "recent_score": 0,
-    "recent_artist_plays": 0
-  },
-  {
-    "name": "Disaster Trick (Deluxe Edition)",
-    "artist": "Horse Jumper of Love",
-    "artist_id": "6U1lmwvy3I9dIYu9RalJi6",
-    "type": "album",
-    "track_id": "0jcGCxzlBnunC3M9mqCM5x",
-    "liked_count": 7,
-    "recent_score": 0,
-    "recent_artist_plays": 3
-  },
-  {
-    "name": "Son Of Spergy",
-    "artist": "Daniel Caesar",
-    "artist_id": "20wkVLutqVOYrc0kxFs7rA",
-    "type": "album",
-    "track_id": "2xyVcW7Xab4ITjIQ98ewZJ",
-    "liked_count": 10,
-    "recent_score": 0,
-    "recent_artist_plays": 0
-  },
-  {
-    "name": "Berghain",
-    "artist": "Yves Tumor",
-    "artist_id": "0qu422H5MOoQxGjd4IzHbS",
+    "name": "Supernatural Feelings (Remix)",
+    "artist": "Night Tapes",
+    "artist_id": "5APEQlUaQ5K70LgPqAdTuU",
     "type": "single",
-    "track_id": "0avVU24xBfXW7ItE0xtzN2",
-    "liked_count": 9,
-    "recent_score": 0,
-    "recent_artist_plays": 0
+    "album_id": "1VdXwMQlRxSguNyfGci4lv",
+    "liked_count": 20,
+    "recent_score": 21,
+    "recent_artist_plays": 11,
+    "release_date": "2025-10-31"
   },
   {
-    "name": "Half-Nelson",
-    "artist": "binki",
-    "artist_id": "2jbd7OqeJJd1hz81vOXwwW",
-    "type": "ep",
-    "track_id": "6cPsjvVs2XdGPZMwJ89C3F",
-    "liked_count": 8,
-    "recent_score": 0,
-    "recent_artist_plays": 1
-  },
-  {
-    "name": "Days Go By",
-    "artist": "james K",
-    "artist_id": "25BObiRSDCMwVrBGIVaLIf",
+    "name": "Unoriginal / Black-Eyed Susan Climb",
+    "artist": "Magdalena Bay",
+    "artist_id": "1oPRcJUkloHaRLYx0olBLJ",
     "type": "single",
-    "track_id": "4lSvPREJrz07UYjUCB4X3p",
+    "album_id": "6G8lUZ22qQTBDsV5EKN4MO",
+    "liked_count": 22,
+    "recent_score": 0,
+    "recent_artist_plays": 2,
+    "release_date": "2025-10-31"
+  },
+  {
+    "name": "Fate Euphoric",
+    "artist": "Twen",
+    "artist_id": "7iyWvxyp2SxGg3L66TmHbO",
+    "type": "album",
+    "album_id": "7q6joHybfVw0FSgoMqY882",
+    "liked_count": 16,
+    "recent_score": 0,
+    "recent_artist_plays": 8,
+    "release_date": "2025-11-04"
+  },
+  {
+    "name": "Blouse",
+    "artist": "Jordana",
+    "artist_id": "5Bw9kFNhy019e4IBCJZlzw",
+    "type": "single",
+    "album_id": "7cdBfqSWLaEM9LYDAyvwBz",
+    "liked_count": 20,
+    "recent_score": 0,
+    "recent_artist_plays": 1,
+    "release_date": "2025-11-04"
+  },
+  {
+    "name": "General!",
+    "artist": "3l3d3p",
+    "artist_id": "1Q2WlUWRQZVxpBBO4UHRV5",
+    "type": "album",
+    "album_id": "7yQGaOzvjsb3OlZxSqnLpU",
     "liked_count": 3,
     "recent_score": 0,
-    "recent_artist_plays": 4
+    "recent_artist_plays": 10,
+    "release_date": "2025-10-30"
   },
   {
-    "name": "Slower Than Sound",
-    "artist": "Babeheaven",
-    "artist_id": "0RlWCq8bq0lJgR6ZTvcqjQ",
+    "name": "Evangeline",
+    "artist": "Whitney",
+    "artist_id": "32aUoW94mJ7xTJI7fG0V1G",
     "type": "ep",
-    "track_id": "1gHhc5Rqh1YdPKzPolV37Q",
-    "liked_count": 7,
+    "album_id": "6KvzvU0oOFWLw7yZhV3qse",
+    "liked_count": 11,
     "recent_score": 0,
-    "recent_artist_plays": 0
+    "recent_artist_plays": 0,
+    "release_date": "2025-11-04"
   },
   {
     "name": "Astronaut",
     "artist": "Phoebe Rings",
     "artist_id": "6bU6vdMpAqDEoWsj8iUNEf",
     "type": "single",
-    "track_id": "04qwAvCuhxtUTygnnQEq5L",
-    "liked_count": 2,
+    "album_id": "04qwAvCuhxtUTygnnQEq5L",
+    "liked_count": 6,
     "recent_score": 0,
-    "recent_artist_plays": 3
+    "recent_artist_plays": 3,
+    "release_date": "2025-10-29"
+  },
+  {
+    "name": "Do It",
+    "artist": "underscores",
+    "artist_id": "7HfUJxeVTgrvhk0eWHFzV7",
+    "type": "single",
+    "album_id": "3q2koL9KwKQxUue4hn8oWg",
+    "liked_count": 9,
+    "recent_score": 0,
+    "recent_artist_plays": 0,
+    "release_date": "2025-11-04"
+  },
+  {
+    "name": "chrome is lullaby: re",
+    "artist": "Her New Knife",
+    "artist_id": "3BGUNVzuoQ79pOjLxJsZZg",
+    "type": "ep",
+    "album_id": "6IMuVRDNN9fJ8vuKS8cX4F",
+    "liked_count": 4,
+    "recent_score": 0,
+    "recent_artist_plays": 4,
+    "release_date": "2025-10-31"
+  },
+  {
+    "name": "DEATH CULT ZOMBIE",
+    "artist": "Genesis Owusu",
+    "artist_id": "1HvH97rzvCH6lfnLlgyfke",
+    "type": "single",
+    "album_id": "4jeNB0UKUljys3WNSWC4Je",
+    "liked_count": 4,
+    "recent_score": 0,
+    "recent_artist_plays": 3,
+    "release_date": "2025-10-30"
   },
   {
     "name": "angie.exe",
     "artist": "spill tab",
     "artist_id": "3qqkHeEhezlIaNj1vFYH2r",
     "type": "ep",
-    "track_id": "6MJvwyrA19Y2SPSU25vq1S",
-    "liked_count": 5,
+    "album_id": "6MJvwyrA19Y2SPSU25vq1S",
+    "liked_count": 7,
     "recent_score": 0,
-    "recent_artist_plays": 0
+    "recent_artist_plays": 0,
+    "release_date": "2025-10-29"
   },
   {
-    "name": "Hold Me (LUCASV remix)",
-    "artist": "spill tab",
-    "artist_id": "3qqkHeEhezlIaNj1vFYH2r",
+    "name": "Bugatti (Benny Benassi & Laherte Remix)",
+    "artist": "Pusha T",
+    "artist_id": "0ONHkAv9pCAFxb0zJwDNTy",
     "type": "single",
-    "track_id": "01vLXLE8crXE7FZDzMcIsB",
+    "album_id": "45fy6u5WtQQN58ar14bvG2",
     "liked_count": 5,
     "recent_score": 0,
-    "recent_artist_plays": 0
+    "recent_artist_plays": 0,
+    "release_date": "2025-10-31"
+  },
+  {
+    "name": "choke enough (Deluxe)",
+    "artist": "Oklou",
+    "artist_id": "6fFcUOFcbjeIuEomuUthkw",
+    "type": "album",
+    "album_id": "2G7CqmCYcpF1GtpXx5ttRO",
+    "liked_count": 4,
+    "recent_score": 0,
+    "recent_artist_plays": 0,
+    "release_date": "2025-10-30"
   },
   {
     "name": "When I Was Young",
     "artist": "Jaguar Sun",
     "artist_id": "4WQwU51LUtrVrw0K8BMpAC",
     "type": "single",
-    "track_id": "4O9Ef9Lj2S4BAmQJcwWTml",
+    "album_id": "4O9Ef9Lj2S4BAmQJcwWTml",
     "liked_count": 4,
     "recent_score": 0,
-    "recent_artist_plays": 0
+    "recent_artist_plays": 0,
+    "release_date": "2025-10-29"
   },
   {
-    "name": "GO:OD AM (10th Anniversary)",
-    "artist": "Mac Miller",
-    "artist_id": "4LLpKhyESsyAXpc4laK94U",
-    "type": "album",
-    "track_id": "39yycJHBG2dIjrRVXqyYFR",
-    "liked_count": 4,
-    "recent_score": 0,
-    "recent_artist_plays": 0
-  },
-  {
-    "name": "GOLDFISH",
-    "artist": "The Alchemist",
-    "artist_id": "0eVyjRhzZKke2KFYTcDkeu",
-    "type": "album",
-    "track_id": "6EXDkyvi5H3Ys8KCYDkE6g",
-    "liked_count": 3,
-    "recent_score": 0,
-    "recent_artist_plays": 0
-  },
-  {
-    "name": "if you said",
-    "artist": "The Two Lips",
-    "artist_id": "0jtiZkDcuWRf647co8id50",
+    "name": "YOU READY?!",
+    "artist": "Garrett Sparrow",
+    "artist_id": "3DnMgnxJt61Y8bWHv2l9qs",
     "type": "single",
-    "track_id": "769lndtsL7j4NxaulJEoMD",
+    "album_id": "22Duo7HOmbvmB5cUl5ajTc",
+    "liked_count": 4,
+    "recent_score": 0,
+    "recent_artist_plays": 0,
+    "release_date": "2025-11-03"
+  },
+  {
+    "name": "Entwined",
+    "artist": "Grimes",
+    "artist_id": "053q0ukIDRgzwTr4vNSwab",
+    "type": "single",
+    "album_id": "4M45TZxg8HtnBwCDyqOb6B",
     "liked_count": 3,
     "recent_score": 0,
-    "recent_artist_plays": 0
+    "recent_artist_plays": 0,
+    "release_date": "2025-10-31"
   },
   {
-    "name": "Describe",
-    "artist": "Hannah Jadagu",
-    "artist_id": "523ty8zP7K5cPIdenUm4bj",
-    "type": "album",
-    "track_id": "6MZlKkSCbG2A5HhmKpsAOI",
+    "name": "Cinderella (Olof Dreijer Remix)",
+    "artist": "Model/Actriz",
+    "artist_id": "7gdb1IQFHFQqCc5KoLTYNC",
+    "type": "single",
+    "album_id": "2QSyP0lJf7punaQGS9Xc69",
     "liked_count": 2,
     "recent_score": 0,
-    "recent_artist_plays": 1
+    "recent_artist_plays": 1,
+    "release_date": "2025-11-03"
   },
   {
-    "name": "Holy Water",
-    "artist": "Hether",
-    "artist_id": "5O35zGUolf87RATk2NgSD3",
-    "type": "album",
-    "track_id": "3PxjhJ8Lj3YE2PodJ1BVIa",
+    "name": "Skywide",
+    "artist": "Alison's Halo",
+    "artist_id": "1xD4rzgPGOwrc7RHZywzKg",
+    "type": "ep",
+    "album_id": "7mPMYPcH6OM6m8PeaJ8DSD",
     "liked_count": 2,
     "recent_score": 0,
-    "recent_artist_plays": 0
+    "recent_artist_plays": 0,
+    "release_date": "2025-10-31"
   },
   {
     "name": "Shitshow",
     "artist": "Kid Sistr",
     "artist_id": "7ysZTe2PbCTqmC2tE1dpCk",
     "type": "single",
-    "track_id": "4Y2ylsrC58FJXRx2zZKecG",
+    "album_id": "4Y2ylsrC58FJXRx2zZKecG",
     "liked_count": 2,
     "recent_score": 0,
-    "recent_artist_plays": 0
+    "recent_artist_plays": 0,
+    "release_date": "2025-10-29"
   },
   {
-    "name": "mist",
-    "artist": "niquo",
-    "artist_id": "1NdjUWVsLvRmiJmtrynbKF",
-    "type": "single",
-    "track_id": "4B52Psg0iY5udvrWP2VL86",
+    "name": "Little Giants",
+    "artist": "Snoozer",
+    "artist_id": "3mF91DSmbwuyfltpQdY3q8",
+    "type": "ep",
+    "album_id": "6HNFSb2pQaVZFBP55AAfGg",
     "liked_count": 2,
     "recent_score": 0,
-    "recent_artist_plays": 0
+    "recent_artist_plays": 0,
+    "release_date": "2025-10-31"
   },
   {
-    "name": "A Spyglass to One\u2019s Face",
-    "artist": "Dirty Art Club",
-    "artist_id": "2DcAdoxP41GECOfZt2MhQL",
+    "name": "01101100 01101001 01110110 01100101 (live)",
+    "artist": "Asian Glow",
+    "artist_id": "74om4qLxb9MIsubhtvxQQJ",
     "type": "album",
-    "track_id": "7yiDdTpi59Rl8N5bplmynD",
+    "album_id": "29nqgglj8LNzj5vEsJNnQx",
     "liked_count": 2,
     "recent_score": 0,
-    "recent_artist_plays": 0
+    "recent_artist_plays": 0,
+    "release_date": "2025-10-29"
+  },
+  {
+    "name": "Steppin' Into The Light",
+    "artist": "Willie Wright",
+    "artist_id": "3dH7ZRgXMUUsJrhHeDPftx",
+    "type": "ep",
+    "album_id": "0cp0alaFP2aHwdIPGyDvcz",
+    "liked_count": 2,
+    "recent_score": 0,
+    "recent_artist_plays": 0,
+    "release_date": "2025-11-03"
   },
   {
     "name": "we're having a barn dance (deluxe)",
     "artist": "lavender",
     "artist_id": "6FfKXg3QdDbbwRs9JzffpY",
     "type": "album",
-    "track_id": "62irEGEc5OQOT6VPmRg8m9",
+    "album_id": "62irEGEc5OQOT6VPmRg8m9",
     "liked_count": 2,
     "recent_score": 0,
-    "recent_artist_plays": 0
+    "recent_artist_plays": 0,
+    "release_date": "2025-10-29"
   },
   {
-    "name": "Call Me",
-    "artist": "Anna of the North",
-    "artist_id": "1mSJCvDX0W7Dn7S9C6vmvI",
+    "name": "Details",
+    "artist": "Hot Flash Heat Wave",
+    "artist_id": "33LSz2nhC8pCPTb3pd5add",
     "type": "single",
-    "track_id": "1MQRxIVZfu0T2UM5Z5x8Sz",
+    "album_id": "5GyBqa1FIclnvlBej61YxM",
     "liked_count": 2,
     "recent_score": 0,
-    "recent_artist_plays": 0
-  },
-  {
-    "name": "Aferrado A Mi Ex",
-    "artist": "Luna Luna",
-    "artist_id": "5TlEHNqVreukNnk4aj7mVr",
-    "type": "single",
-    "track_id": "6VAl8hueodCbVwybaKS5Rs",
-    "liked_count": 2,
-    "recent_score": 0,
-    "recent_artist_plays": 0
+    "recent_artist_plays": 0,
+    "release_date": "2025-10-31"
   }
 ]
