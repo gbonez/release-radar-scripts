@@ -211,7 +211,7 @@ def check_new_releases(artists_data, recent_scores):
             })
     releases_sorted = sorted(
         releases,
-        key=lambda r: (r["liked_count"] + r["recent_score"] + r["recent_artist_plays"]),
+        key=lambda r: r["liked_count"],
         reverse=True
     )
     with open(RELEASES_FILE, "w") as f:
@@ -276,6 +276,8 @@ def add_new_releases_to_playlist(releases, playlist):
     added_releases = []
     # Track which artists we've already added to avoid multiple notifications per artist
     notified_artists = set()
+    # Track artists added for ranked notifications
+    notification_candidates = []
 
     for r in releases:
         album_id = r.get("album_id")
@@ -338,15 +340,16 @@ def add_new_releases_to_playlist(releases, playlist):
 
         safe_spotify_call(sp.playlist_add_items, playlist["id"], [first_track_id])
         
-        # Only add to notification list if:
-        # 1. Artist didn't exist in playlist before this run, OR
-        # 2. Artist existed but we haven't already notified about them in this run
-        if not artist_existed_in_playlist or r["artist_id"] not in notified_artists:
-            added_releases.append(r)
+        # Add to notification candidates if artist hasn't been added yet
+        if r["artist_id"] not in notified_artists:
+            notification_candidates.append(r)
             notified_artists.add(r["artist_id"])
-            print(f"🎧 Added new release '{r['name']}' by {r['artist']} (will notify)")
+            print(f"🎧 Added new release '{r['name']}' by {r['artist']} (candidate for notification)")
         else:
-            print(f"🎧 Added new release '{r['name']}' by {r['artist']} (no notification - already notified about this artist)")
+            print(f"🎧 Added new release '{r['name']}' by {r['artist']} (no notification - already have this artist)")
+        
+        # Always add to the full list for playlist tracking
+        added_releases.append(r)
 
         # Update tracking structures
         existing_track_ids.add(first_track_id)
@@ -361,7 +364,14 @@ def add_new_releases_to_playlist(releases, playlist):
             "track_name": album_items[0].get("name", "").lower().strip()
         })
 
-    return added_releases
+    # Sort notification candidates by liked count only
+    ranked_notification_candidates = sorted(
+        notification_candidates,
+        key=lambda r: r.get("liked_count", 0),
+        reverse=True
+    )
+    
+    return added_releases, ranked_notification_candidates
 
 def remove_old_tracks_from_playlist(playlist, days=10):
     now = datetime.datetime.utcnow()
@@ -394,31 +404,19 @@ def remove_old_tracks_from_playlist(playlist, days=10):
         print("No old tracks to remove.")
 
 # ==== SMS via SelfPing ====
-def send_sms(new_releases, playlist_url):
-    if not new_releases:
+def send_sms(ranked_releases, playlist_url):
+    if not ranked_releases:
         print("No new releases to notify.")
         return
     
-    # Filter out artists with very low liked counts (should already be filtered, but double-check)
-    filtered_releases = [r for r in new_releases if r.get("liked_count", 0) > 1]
-    
-    # Sort by multiple criteria for better ranking:
-    # 1. Primary: liked_count (descending)
-    # 2. Secondary: recent_score + recent_artist_plays (descending)
-    ranked_releases = sorted(
-        filtered_releases,
-        key=lambda r: (
-            r.get("liked_count", 0),
-            r.get("recent_score", 0) + r.get("recent_artist_plays", 0)
-        ),
-        reverse=True
-    )
+    # The releases are already ranked by liked count, just take top 5
+    top_releases = ranked_releases[:5]
     
     today = datetime.datetime.now().strftime("%m/%d/%y")
     message_body = f"🎵 New releases for {today}:\n\n"
     
-    # Show top 5 releases with liked count for context
-    for i, r in enumerate(ranked_releases[:5], start=1):
+    # Show top 5 releases (already ranked by liked count)
+    for i, r in enumerate(top_releases, start=1):
         message_body += f"{i}. '{r['name']}' by {r['artist']} ({r['type']})\n"
     
     if len(ranked_releases) > 5:
@@ -426,7 +424,9 @@ def send_sms(new_releases, playlist_url):
     
     message_body += f"\nFull playlist: {playlist_url}"
     
-    print(f"📱 Sending notification for {len(ranked_releases[:5])} top releases (ranked by likes)")
+    print(f"📱 Sending notification for top {len(top_releases)} releases (ranked by likes)")
+    rankings_info = ', '.join([f"{r['artist']} ({r['liked_count']} likes)" for r in top_releases])
+    print(f"   Rankings: {rankings_info}")
     
     data = {"to": MY_PHONE, "message": message_body}
     headers = {"Content-Type": "application/json", "Authorization": f"Bearer {SELFPING_API_KEY}"}
@@ -446,7 +446,7 @@ if __name__ == "__main__":
     releases = check_new_releases(artists_data, recent_scores)
 
     playlist = get_or_create_playlist()
-    new_releases_added = add_new_releases_to_playlist(releases, playlist)
+    new_releases_added, ranked_notification_list = add_new_releases_to_playlist(releases, playlist)
     remove_old_tracks_from_playlist(playlist, days=10)
 
-    send_sms(new_releases_added, playlist.get("external_urls", {}).get("spotify", ""))
+    send_sms(ranked_notification_list, playlist.get("external_urls", {}).get("spotify", ""))
