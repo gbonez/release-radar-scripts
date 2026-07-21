@@ -32,6 +32,27 @@ PLAYLIST_ID = os.environ.get("PLAYLIST_ID")
 scope = "user-library-read playlist-modify-private playlist-modify-public user-top-read"
 
 # ==== SPOTIFY AUTH ====
+def send_reauth_sms():
+    """Send an SMS with the Spotify re-authorization URL."""
+    import urllib.parse
+    params = urllib.parse.urlencode({
+        "client_id": SPOTIFY_CLIENT_ID,
+        "response_type": "code",
+        "redirect_uri": SPOTIFY_REDIRECT_URI,
+        "scope": scope,
+    })
+    auth_url = f"https://accounts.spotify.com/authorize?{params}"
+    message = f"Release Radar: Spotify token expired. Re-authorize here: {auth_url}"
+    try:
+        requests.post(
+            SELFPING_ENDPOINT,
+            json={"api_key": SELFPING_API_KEY, "to": MY_PHONE, "message": message},
+            timeout=10
+        )
+        print("📱 Re-authorization SMS sent.")
+    except Exception as e:
+        print(f"⚠️  Could not send re-auth SMS: {e}")
+
 auth_manager = SpotifyOAuth(
     client_id=SPOTIFY_CLIENT_ID,
     client_secret=SPOTIFY_CLIENT_SECRET,
@@ -40,7 +61,13 @@ auth_manager = SpotifyOAuth(
     cache_path=None
 )
 if SPOTIFY_REFRESH_TOKEN:
-    auth_manager.refresh_access_token(SPOTIFY_REFRESH_TOKEN)
+    try:
+        auth_manager.refresh_access_token(SPOTIFY_REFRESH_TOKEN)
+    except Exception as e:
+        print(f"❌ Spotify token refresh failed: {e}")
+        print("🔑 The refresh token has expired. Re-authorization is required.")
+        send_reauth_sms()
+        raise SystemExit(1)
 sp = Spotify(auth_manager=auth_manager)
 
 # ==== HELPERS ====
